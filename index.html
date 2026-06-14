@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Mời Kỷ Yếu Online</title>
+    <style>
+        /* Toàn bộ giao diện */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Khung tấm thiệp */
+        .invitation-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            padding: 30px 25px;
+            text-align: center;
+            border: 2px solid #dfb76c;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .invitation-card::before {
+            content: "✦";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #dfb76c;
+            font-size: 20px;
+        }
+
+        /* Ảnh kỷ niệm */
+        .image-container {
+            width: 100%;
+            height: 220px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Tiêu đề & Văn bản */
+        h1 {
+            color: #1a2a3a;
+            font-size: 26px;
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 15px;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        /* Hộp thông tin */
+        .info-box {
+            background-color: #f9f6f0;
+            border-left: 4px solid #dfb76c;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-item {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .info-item strong {
+            color: #1a2a3a;
+        }
+
+        /* Nút bấm nhóm */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #1a2a3a;
+            color: #ffffff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #dfb76c;
+            color: #1a2a3a;
+            transform: translateY(-2px);
+        }
+
+        /* Nút bật/tắt nhạc */
+        .music-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dfb76c;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Bảng điều khiển Chỉnh sửa (Ẩn mặc định, chỉ hiện với chủ thớt) */
+        .edit-panel {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+            text-align: left;
+        }
+
+        .edit-panel input, .edit-panel textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 13px;
+        }
+
+        .btn-admin {
+            background-color: #7f8c8d;
+            font-size: 13px;
+            padding: 8px 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="invitation-card">
+        <!-- Nút Nhạc -->
+        <button class="music-btn" onclick="toggleMusic()" id="musicBtn">🎵</button>
+
+        <!-- Ảnh Thiệp -->
+        <div class="image-container">
+            <img id="cardImg" src="https://unsplash.com" alt="Kỷ yếu">
+        </div>
+
+        <!-- Nội dung hiển thị -->
+        <h1 id="cardTitle">Thiệp Mời Kỷ Yếu</h1>
+        <p class="subtitle" id="cardSubtitle">Chặng đường thanh xuân rực rỡ</p>
+        <div class="content" id="cardContent">
+            Thân mời bạn đến tham dự buổi chụp ảnh kỷ yếu cùng chúng mình. Hãy cùng nhau lưu giữ những khoảnh khắc đẹp nhất nhé!
+        </div>
+
+        <!-- Thông tin chi tiết -->
+        <div class="info-box">
+            <div class="info-item">📅 <strong>Thời gian:</strong> <span id="cardTime">08:00 AM - Chủ Nhật, Ngày 28/06/2026</span></div>
+            <div class="info-item">📍 <strong>Địa điểm:</strong> <span id="cardLocation">Sân trường & Phim trường Alpha</span></div>
+            <div class="info-item">👔 <strong>Trang phục:</strong> <span id="cardDress">Đồng phục trường / Áo dài / Vest</span></div>
+        </div>
+
+        <!-- Các Nút Bấm -->
+        <div class="btn-group">
+            <button class="btn" onclick="openMap()">Xem Vị Trí Bản Đồ</button>
+            <button class="btn btn-admin" onclick="toggleEditPanel()">Bật/Tắt Chế Độ Sửa Thiệp</button>
+        </div>
+
+        <!-- Khung Chỉnh Sửa Trực Tiếp (Edit Mode) -->
+        <div class="edit-panel" id="editPanel" style="display: none;">
+            <h3 style="margin: 0 0 10px 0; color: #1a2a3a; font-size: 16px;">Sửa nội dung thiệp mời tại đây:</h3>
+            
+            <label>Link Ảnh (Dán link ảnh mạng vào đây):</label>
+            <input type="text" id="inputImg" value="https://unsplash.com">
+
+            <label>Tiêu đề:</label>
+            <input type="text" id="inputTitle" value="Thiệp Mời Kỷ Yếu">
+
+            <label>Lời tựa:</label>
+            <input type="text" id="inputSubtitle" value="Chặng đường thanh xuân rực rỡ">
+
+            <label>Lời mời chi tiết:</label>
+            <textarea id="inputContent" rows="3">Thân mời bạn đến tham dự buổi chụp ảnh kỷ yếu cùng chúng mình. Hãy cùng nhau lưu giữ những khoảnh khắc đẹp nhất nhé!</textarea>
+
+            <label>Thời gian:</label>
+            <input type="text" id="inputTime" value="08:00 AM - Chủ Nhật, Ngày 28/06/2026">
+
+            <label>Địa điểm:</label>
+            <input type="text" id="inputLocation" value="Sân trường & Phim trường Alpha">
+
+            <label>Trang phục:</label>
+            <input type="text" id="inputDress" value="Đồng phục trường / Áo dài / Vest">
+
+            <label>Link Google Maps:</label>
+            <input type="text" id="inputMap" value="https://google.com">
+
+            <label>Link Nhạc (Đuôi file phải có .mp3):</label>
+            <input type="text" id="inputMusic" value="https://soundhelix.com">
+
+            <button class="btn" style="background-color: #27ae60;" onclick="saveChanges()">Cập Nhật Lên Thiệp</button>
+        </div>
+    </div>
+
+    <!-- Nhạc nền bí mật -->
+    <audio id="bgMusic" loop src="https://soundhelix.com"></audio>
+
+    <script>
+        let mapUrl = "https://google.com";
+        const audio = document.getElementById('bgMusic');
+
+        // Hàm mở bản đồ
+        function openMap() {
+            window.open(mapUrl, "_blank");
+        }
+
+        // Hàm điều khiển nhạc
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play().catch(e => alert("Hãy tương tác với trang web trước khi bật nhạc nhé!"));
+                document.getElementById('musicBtn').innerText = "⏸️";
+            } else {
+                audio.pause();
+                document.getElementById('musicBtn').innerText = "🎵";
+            }
+        }
+
+        // Ẩn/hiện khung sửa
+        function toggleEditPanel() {
+            const panel = document.getElementById('editPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Lưu thay đổi từ form nhập liệu vào giao diện thiệp mời
+        function saveChanges() {
+            // Cập nhật chữ
+            document.getElementById('cardTitle').innerText = document.getElementById('inputTitle').value;
+            document.getElementById('cardSubtitle').innerText = document.getElementById('inputSubtitle').value;
+            document.getElementById('cardContent').innerText = document.getElementById('inputContent').value;
+            document.getElementById('cardTime').innerText = document.getElementById('inputTime').value;
+            document.getElementById('cardLocation').innerText = document.getElementById('inputLocation').value;
+            document.getElementById('cardDress').innerText = document.getElementById('inputDress').value;
+            
+            // Cập nhật ảnh
+            document.getElementById('cardImg').src = document.getElementById('inputImg').value;
+            
+            // Cập nhật map
+            mapUrl = document.getElementById('inputMap').value;
+
+            // Cập nhật nhạc mới
+            const newMusicUrl = document.getElementById('inputMusic').value;
+            if(audio.src !== newMusicUrl) {
+                audio.src = newMusicUrl;
+                audio.pause();
+                document.getElementById('musicBtn').innerText = "🎵";
+            }
+
+            alert("Đã cập nhật giao diện thiệp thành công!");
+            toggleEditPanel(); // Ẩn bảng sửa đi cho đẹp
+        }
+    </script>
+</body>
+</html>
+
+
